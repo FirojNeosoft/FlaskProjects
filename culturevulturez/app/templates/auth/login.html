@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+        Culture Vulturez: {% block title %} {% endblock %}
+    </title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="{{ url_for('static', filename='toolkit.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='application.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='bootstrap-formhelpers.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+
+    <style>
+      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+      /* this chunk of css is not part of the toolkit :) */
+      body {
+        width: 1px;
+        min-width: 100%;
+        *width: 100%;
+      }
+    </style>
+
+  </head>
+
+
+<body class="with-top-navbar">
+
+<nav class="navbar navbar-inverse navbar-fixed-top app-navbar">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-main">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-collapse-main">
+      <ul class="nav navbar-nav">
+        <li class="pull-left1 active culture">
+            <a href="{{ url_for('auth.index') }}">Culture Vulturez</a>
+        </li>
+      </ul>
+        <form action="{{ url_for('auth.register') }}" method="post" class="navbar-form navbar-right form-horizontal" role="form">
+            <div>
+              <button type="submit" class="btn form-control btn-pill btn-default1">Sign Up</button>
+            </div>
+        </form>
+      </div>
+  </div>
+</nav>
+
+
+        <main>
+        <div class="container">
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+{% block main %}
+    <div class="container-fluid container-fill-height">
+      <div class="container-content-middle">
+        <form role="form" action="{{ url_for('auth.login') }}" method="post" class="m-x-auto text-center app-login-form">
+            {{ form.hidden_tag() }}
+
+          <a href="{{url_for('main.home') }}" class="app-brand m-b-lg">
+            <img class="img-circle" src="../static/img/brand1.jpeg" alt="brand">
+          </a> <br/>
+        <div class="form-group">
+            {{ form.email(class="form-control", type="email", placeholder="Email") }} <br />
+            {{ form.password(class="form-control", placeholder="Password") }}  <br />
+            {{ form.remember_me.label }} {{ form.remember_me }}
+        </div>
+            <div class="m-b-lg text-center">
+                {{ form.submit(class="btn btn-pill btn-default1") }}
+            </div>
+
+          <footer class="screen-login">
+            <a href="#" class="text">Forgot password</a>
+          </footer>
+        </form>
+      </div>
+    </div>
+    {% endblock %}
+
+    <script src="{{ url_for('static', filename='bootstrap-formhelpers.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-formhelpers.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='toolkit.js') }}"></script>
+    <script src="{{ url_for('static', filename='application.js') }}"></script>
+    <script>
+      // execute/clear BS loaders for docs
+      $(function(){
+        if (window.BS&&window.BS.loader&&window.BS.loader.length) {
+          while(BS.loader.length){(BS.loader.pop())()}
+        }
+      })
+    </script>
+

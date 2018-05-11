@@ -1,0 +1,63 @@
+<ul class="list-group media-list media-list-stream" id="latest_async">
+
+    {% for post in posts %}
+    <li class="post media list-group-item p-a" >
+        <a class="media-left" href="{{ url_for('.profile', username=post.author.username) }}">
+            <img class="media-object img-circle" src="{{ post.author.profile_pic }}">
+        </a>
+        <div class="media-body">
+            <div class="media-heading">
+                <small class="pull-right text-muted">{{ moment(post.timestamp).fromNow() }}</small>
+              <a href="{{ url_for('.profile', username=post.author.username) }}">
+                <h5>{{ post.author.first_name }} {{ post.author.last_name }} | @{{ post.author.username }}</h5>
+              </a>
+            </div>
+            <p>
+                {{ post.body }}
+            </p>
+            {% if post.photo %}<img class="media-body-inline-img" src="{{ post.photo }}" />{% endif %}
+
+            <a class="media" href="{{ url_for('.post_likes', id=post.id) }}">
+                {% if post.user_likes.count() == 1  %} <span class="label label-warning">{{ post.user_likes.count() }} Like</span>
+                    {% elif post.user_likes.count() > 1  %} <span class="label label-warning">{{ post.user_likes.count() }} Likes</span>
+                {% endif %}
+
+          {% if not current_user.is_liking_post(post) %}
+              <a href="{{ url_for('.like_post', id=post.id) }}">
+                <button class="btn btn-pill btn-warning btn-xs">
+                    <span class="icon icon-thumbs-up"></span> Like
+                </button>
+              </a>
+          {% else %}
+              <a href="{{ url_for('.unlike_post', id=post.id) }}">
+                <button class="btn btn-pill btn-default1 btn-xs">
+                    <span class="icon icon-thumbs-up"></span> Liked
+                </button>
+              </a>
+          {% endif %}
+
+            <a class="media" href="{{ url_for('.post', id=post.id) }}">
+                {% if post.comments.count() == 1  %} <span class="btn btn-pill btn-info btn-xs">{{ post.comments.count() }} Comment</span>
+                    {% elif post.comments.count() > 1  %} <span class="btn btn-pill btn-info btn-xs">{{ post.comments.count() }} Comments</span>
+                    {% elif post.comments.count() < 1  %} <span class="btn btn-pill btn-info btn-xs">Comment</span>
+                {% endif %}
+            </a>
+            {% if current_user == post.author %}
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="icon pull-right icon-dots-three-horizontal"></span>
+                </a>
+                     <ul class="dropdown-menu pull-right">
+                         <li><a href="{{ url_for('.edit_post', id=post.id) }} ">edit post</a></li>
+                     </ul>
+            {% elif current_user.is_administrator() %}
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="icon pull-right icon-dots-three-horizontal"></span>
+                </a>
+                     <ul class="dropdown-menu pull-right">
+                         <li><a href="{{ url_for('.edit_post', id=post.id) }} ">edit post [Admin]</a></li>
+                     </ul>
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>

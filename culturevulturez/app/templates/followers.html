@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    Followers
+{% endblock %}
+
+{% block main %}
+    <div class="panel panel-default col-md-6 col-md-offset-3">
+        <div class="panel-heading">
+        <h1>{{ title }} {{ user.first_name }}</h1>
+            </div>
+            <table class="table table-hover followers">
+                <thead><tr><th>User</th><th>Since</th><th>From</th></tr></thead>
+                {% for follow in follows %}
+                {% if follow.user != user %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('.profile', username = follow.user.username) }}">
+                            <img class="img-circle" src="">
+                            {{ follow.user.first_name }} {{ follow.user.last_name }} ({{ follow.user.username }})
+                        </a>
+                    </td>
+                    <td>{{ moment(follow.timestamp).format('L') }}</td>
+                    <td>{{ follow.user.nationality }} </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+    </div>
+{% endblock %}

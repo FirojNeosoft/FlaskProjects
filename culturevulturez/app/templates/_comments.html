@@ -1,0 +1,54 @@
+<ul class="list-group media-list m-b media-list-stream">
+
+    {% for comment in comments %}
+    <li class="post media list-group-item p-a">
+        <a class="media-left" href="{{ url_for('.profile', username=comment.author.username) }}">
+            <img class="media-object img-circle" src="{{ comment.author.profile_pic }}">
+        </a>
+        <div class="media-body">
+            <div class="media-heading">
+                <small class="pull-right text-muted">{{ moment(comment.timestamp).fromNow() }}</small>
+              <a href="{{ url_for('.profile', username=comment.author.username) }}">
+                  <div><strong>{{ comment.author.first_name }} {{ comment.author.last_name }}</strong> | @{{ comment.author.username }}</div>
+              </a>
+            </div>
+            <div>
+                {% if comment.disabled %}
+                <p><i>This comment has been disabled</i></p>
+                {% endif %}
+                {% if moderate or not comment.disabled %}
+                    <p>
+                        {{ comment.body }}
+                    </p>
+
+                {% if comment.user_likes.count() == 1  %} <span class="label label-warning">{{ comment.user_likes.count() }} Like</span>
+                    {% elif comment.user_likes.count() > 1  %} <span class="label label-warning">{{ comment.user_likes.count() }} Likes</span>
+                {% endif %}
+
+          {% if not current_user.is_liking_comment(comment) %}
+            <a href="#" class="like" id="{{ comment.id }}" comment_id="{{ comment.id }}">
+              <button class="btn btn-pill btn-warning btn-xs">
+                    <span class="icon icon-thumbs-up"></span> Like
+              </button>
+            </a>
+          {% else %}
+              <a href="{{ url_for('.unlike_comment', id=comment.id) }}">
+                <button class="btn btn-pill btn-default1 btn-xs" comment_id="{{ comment.id }}">
+                    <span class="icon icon-thumbs-up"></span> Liked
+                </button>
+          {% endif %}
+                </a>
+                {% endif %}
+            </div>
+            {% if moderate %}
+                <br>
+                {% if comment.disabled %}
+                <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=comment.id) }}">Enable</a>
+                {% else %}
+                <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=comment.id) }}">Disable</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>

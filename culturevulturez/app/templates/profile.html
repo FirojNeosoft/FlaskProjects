@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block main %}
+
+<div class="profile-header text-center" style="background-image: url(../static/img/iceland.jpg);">
+  <div class="container">
+    <div class="container-inner">
+      <img class="img-circle media-object" src="{{ user.profile_pic }}">
+      <h3 class="profile-header-user">{{ user.first_name }} {{ user.last_name }}  |  @{{ user.username }}</h3>
+      <p class="profile-header-bio">
+        {% if user.bio %} {{ user.bio }} {% endif %}
+      </p>
+    </div>
+      <div class="container-inner">
+      {% if user != current_user %}
+          {% if not current_user.is_following(user) %}
+              <a href="{{ url_for('.follow', username=user.username) }}">
+                <button class="btn btn-primary-outline btn-sm">
+                    <span class="icon icon-add-user"></span> Connect
+                </button>
+              </a>
+          {% else %}
+              <a href="{{ url_for('.unfollow', username=user.username) }}">
+                <button class="btn btn-primary-outline btn-sm">
+                    <span class="icon icon-remove-user"></span> Disconnect
+                </button>
+              </a>
+          {% endif %}
+      {% endif %}
+      <a href="{{ url_for('.followers', username=user.username) }}">
+          Connecting: <span class="badge">{{ user.followers.count() }}</span>
+      </a>
+      <a href="{{ url_for('.following', username=user.username) }}">
+          Connects: <span class="badge">{{ user.followed.count() }}</span>
+      </a>
+      {% if user != current_user and user.is_following(current_user) %}
+      <span class="label label-success">Connected through you</span>
+      {% endif %}
+
+      </div>
+
+  </div>
+
+  <nav class="profile-header-nav" role="navigation">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" href="#posts">Posts</a>
+      </li>
+      <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" href="#connects">Connects Posts</a>
+      </li>
+      <li class="nav-item">
+        <a data-toggle="tab" class="nav-link" href="#info">Info</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="tab-content">
+<div class="container m-y-md tab-pane active fade in" id="posts">
+{% if user == current_user %}
+        <li class="media list-group-item p-a">
+        <div class="input-group">
+          <form role="form"  method="POST" class="m-x-auto app-login-form form-horizontal">
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+
+        {{ form.body(class="form-control", placeholder="What on your mind in culture?") }} <br /> <br />
+        &nbsp
+        {{ form.submit(class="btn btn-pill text-center btn-primary-outline btn-sm", type="submit") }}
+          </form>
+
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-primary-outline btn-default">
+                <span class="icon icon-camera"></span>
+              </button>
+            </div>
+        </div>
+    </li>
+{% endif %}
+
+    {% include '_posts.html' %}
+
+</div>
+
+<div class="tab-pane panel panel-default col-md-6 col-md-offset-3 fade in" id="info">
+    <h4>Name: {{ user.first_name }} {{ user.last_name }}<br />
+    Birthday: {{ user.dob }}<br />
+    From: {{ user.nationality }}<br />
+    Lives in: {{ user.residence }}<br />
+    {% if user == current_user %}Email: {{ user.email }}<br /> {% endif %}
+    Username: {{ user.username }}
+    </h4>
+
+    {% if user == current_user %}
+    <a class="text" href="{{ url_for('.edit_info') }}">
+    Edit Profile
+    </a>
+    {% endif %}
+    {% if current_user.is_administrator() %}
+    <a class="text" href="{{ url_for('.edit_info_admin', id = user.id) }}">
+    Edit Profile Admin
+    </a>
+    {% endif %}
+
+</div>
+</div>
+
+{% endblock %}
+

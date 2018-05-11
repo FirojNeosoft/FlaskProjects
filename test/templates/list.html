@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block body %}
+      <h3>
+         <a>Comments - Flask Example</a>
+      </h3>
+
+      <hr/>
+		
+      <h3>Teachers (<a href = "{{ url_for('add_teacher') }}">Add Teacher</a>)</h3>
+      
+      <table class="table">
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Gender</th>
+               <th>Email</th>
+               <th>Address</th>
+               <th>Age</th>
+               <th>Language</th>
+               <th>Edit</th>
+               <th>Delete</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for teacher in teachers %}
+               <tr>
+                  <td>{{ teacher.name }}</td>
+                  <td>{{ teacher.gender }}</td>
+                  <td>{{ teacher.email }}</td>
+                  <td>{{ teacher.address }}</td>
+                  <td>{{ teacher.age }}</td>
+                  <td>{{ teacher.lang }}</td>
+                  <td><a href = "{{ url_for('teacher_details', id=teacher.id) }}">Edit</a></td>
+                  <!--<td><a href = "{{ url_for('delete_teacher', id=teacher.id) }}" onclick="return confirm('Are you sure you want to delete?');">Delete</a></td>-->
+                  <td><a class="remove_teacher" id="{{ teacher.id }}">Delete</a></td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+{% endblock %}
+
+{% block js %}
+    $('.remove_teacher').bind('click', function() {
+    var teacher_id = $(this).attr('id');
+    bootbox.confirm({
+        message: "Are you sure you want to delete?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function (result) {
+            if(result){
+               $.getJSON($SCRIPT_ROOT + '/teacher/'+teacher_id+'/delete', {}, function(data) {
+                 if(data.result){
+                   location.reload();
+                 }
+               });
+            }
+        }
+    });
+  });
+{% endblock %}

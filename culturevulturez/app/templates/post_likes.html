@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    Post
+{% endblock %}
+
+{% block main %}
+    <div class="panel panel-default col-md-6 col-md-offset-3">
+        {% include '_posts.html' %}
+
+        <div class="text-md-center text-muted"><h4>Likes for this Post</h4></div>
+        {% for post in posts %}
+        {{ post.user_likes }}
+        {% endfor %}
+    </div>
+{% endblock %}

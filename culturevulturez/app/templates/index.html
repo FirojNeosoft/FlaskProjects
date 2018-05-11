@@ -1,0 +1,275 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>  -->
+
+
+<div class="container p-t-md">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel panel-default panel-profile m-b-md">
+        <div class="panel-heading" style="background-image: url(../static/img/iceland.jpg);"></div>
+        <div class="panel-body text-center">
+          <a href="{{ url_for('.profile', username=user.username) }}">
+            <img
+              class="panel-profile-img"
+              src="{{ user.profile_pic }}">
+          </a>
+
+          <h5 class="panel-title">
+            <a class="text-inherit" href="{{ url_for('.profile', username=user.username) }}">{{ user.first_name }} {{ user.last_name }}</a>
+          </h5>
+
+          {% if user.bio %}<p class="m-b-md">{{ user.bio }}</p>{% endif %}
+
+          <ul class="panel-menu">
+            <li class="panel-menu-item">
+              <a href="#userModal" class="text-inherit" data-toggle="modal">
+                Connecting
+                <h5 class="m-y-0">{{ user.followers.count() }}</h5>
+              </a>
+            </li>
+
+            <li class="panel-menu-item">
+              <a href="#userModal" class="text-inherit" data-toggle="modal">
+                Connects
+                <h5 class="m-y-0">{{ user.followed.count() }}</h5>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel panel-default visible-md-block visible-lg-block">
+        <div class="panel-body">
+          <h5 class="m-t-0">About <small>· <a href="#">Edit</a></small></h5>
+          <ul class="list-unstyled list-spaced">
+            <li><span class="text-muted icon icon-users m-r"></span>Became friends with <a href="#">Eustace</a>
+            <li><span class="text-muted icon icon-github m-r"></span>Works at <a href="#">Culture Vulturez</a>
+            <li><span class="text-muted icon icon-home m-r"></span>Lives in <a href="#">Oakland, CA, USA</a>
+            <li><span class="text-muted icon icon-location-pin m-r"></span>From <a href="#">Freetown, Sierra Leone</a>
+          </ul>
+        </div>
+      </div>
+
+       <div class="panel panel-default visible-md-block visible-lg-block">
+        <div class="panel-body">
+            <h5 class="m-t-0">Culture Bytes</h5>
+          <div data-grid="images" data-target-height="150">
+            <div>
+              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_5.jpg">
+            </div>
+
+            <div>
+              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_6.jpg">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="col-md-6">
+<ul class="list-group media-list media-list-stream">
+        <li class="media list-group-item p-a">
+            <div class="input-group">
+                <form role="form"  method="POST" class="m-x-auto app-login-form form-horizontal">
+                    {{ form.csrf_token }}
+                    {{ form.hidden_tag() }}
+                    {{ form.body(class="form-control",id="async_data", placeholder="What on your mind in culture?") }}
+                <div class="input-group-btn">
+                <button type="icon" class="icon icon-camera">
+                    {{ form.photo() }}
+                </button>
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myPhotoModal">Upload photo</button>
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myVideoModal">Upload video</button>
+                </div>
+
+                    {{ form.submit(class="btn btn-pill text-center btn-primary-outline btn-sm" ,id="async", type="button") }}
+                </form>
+
+
+                      <title>Upload new File</title>
+                      <h1>Upload new File</h1>
+                      <form method=post enctype=multipart/form-data action="{{ url_for('main.upload_file') }}">
+                        <p><input type=file name=file>
+                           <input type=submit value=Upload>
+                      </form>
+            </div>
+        </li>
+    </ul>
+            <div class="post-tabs">
+                <ul class="nav nav-tabs">
+                    {% if current_user.is_authenticated %}
+                    <li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Connections Posts</a></li>
+                    <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.explore') }}">Explore</a></li>
+                    {% endif %}
+                </ul>
+                {% include '_posts.html' %}
+            </div>
+        </div>
+
+<div class="col-md-3">
+    <div class="alert alert-info alert-dismissible hidden-xs" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <a class="alert-link" href="{{ url_for('.profile', username=user.username) }}">Visit your profile!</a> Check yourself, before you wreck yourself.
+    </div>
+
+    <div class="panel panel-default m-b-md hidden-xs">
+        <div class="panel-body">
+            <h5 class="m-t-0">See news from around the world</h5>
+            <div data-grid="images" data-target-height="150">
+                <img class="media-object" data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_2.jpg">
+            </div>
+            <p><strong>Just type a City or Country.</strong>See an interesting story? share and tag your connections or connects that might be interested</p>
+            <button class="btn btn-primary-outline btn-sm">Check it out</button>
+        </div>
+    </div>
+
+    <div class="panel panel-default m-b-md hidden-xs">
+        <div class="panel-body">
+        <h5 class="m-t-0">Likes <small>· <a href="#">View All</a></small></h5>
+        <ul class="media-list media-list-stream">
+            <li class="media m-b">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="assets/img/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <strong>Alex Harding</strong> @lex
+                  <div class="media-body-actions">
+                    <button class="btn btn-primary-outline btn-sm">
+                      <span class="icon icon-add-user"></span> Connect</button>
+                  </div>
+                </div>
+          </li>
+           <li class="media">
+            <a class="media-left" href="#">
+              <img
+                class="media-object img-circle"
+                src="assets/img/avatar-mdo.png">
+            </a>
+            <div class="media-body">
+              <strong>Eustace Harding</strong> @eust
+              <div class="media-body-actions">
+                <button class="btn btn-primary-outline btn-sm">
+                  <span class="icon icon-add-user"></span> Connect</button></button>
+              </div>
+            </div>
+          </li>
+        </ul>
+        </div>
+        <div class="panel-footer">
+          See what's going on in culture around you
+        </div>
+      </div>
+
+      <div class="panel panel-default panel-link-list">
+        <div class="panel-body">
+          © 2017 Culture Vulturez<br />
+
+          <a href="#">About</a>
+          <a href="#">Help</a>
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Cookies</a>
+          <a href="#">Ads </a>
+
+          <a href="#">info</a>
+          <a href="#">Brand</a>
+          <a href="#">Status</a>
+        </div>
+      </div>
+      <div><span id=#result></span></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--Photo Modal -->
+<div id="myPhotoModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Upload Photo</h4>
+      </div>
+      <div class="modal-body">
+        <title>Upload new File</title>
+                      <h1>Upload Photo</h1>
+                      <form method=post enctype=multipart/form-data action="{{ url_for('main.upload_file') }}">
+                        <p><input type=file name=file>
+                           <input type=submit value=Upload>
+                      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!--Photo Modal -->
+<div id="myVideoModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Upload Video</h4>
+      </div>
+      <div class="modal-body">
+        <title>Upload Video</title>
+                      <h1>Upload Video</h1>
+                      <form method=post enctype=multipart/form-data action="{{ url_for('main.upload_file') }}">
+                        <p><input type=file name=file>
+                           <input type=submit value=Upload>
+                      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    console.log("inside async")
+    $('#async').click(function() {
+      console.log("inside click")
+        var comment = $('#async_data').val();
+        console.log(comment)
+        $.ajax({
+            url: "{{url_for('main.asyncpost')}}",
+            data: $('form').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log("success");
+                console.log(response);
+                //$('ul#latest_async').append(response);
+                $('ul#latest_async').html(response);
+                $('#async_data').val('');
+
+            },
+            error: function(error) {
+                console.log("error");
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

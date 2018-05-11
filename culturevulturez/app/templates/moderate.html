@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    Moderate
+{% endblock %}
+
+{% block main %}
+    <div class="panel panel-default col-md-6 col-md-offset-3">
+        <div class="panel-heading">Comments</div>
+        {% set moderate = True %}
+        {% include '_comments.html' %}
+    </div>
+{% endblock %}

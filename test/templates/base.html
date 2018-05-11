@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+   <head>
+       <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+       <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+       <script src="{{ url_for('static', filename='js/bootbox.min.js') }}"></script>
+       <script type=text/javascript>
+       $(document).ready(function () {
+           $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+           {% block js %}
+           {% endblock %}
+        });
+       </script>
+
+       <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+   </head>
+   <body>
+   {% block body %}
+   {% endblock %}
+   </body>
+</html>

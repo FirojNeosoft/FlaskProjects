@@ -1,0 +1,53 @@
+{% extends "auth/base.html" %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block main %}
+<div class="col-md-6">
+    <div class="panel1 panel-default panel-profile">
+        {% for field in form.errors %}
+        {% for error in form.errors[field] %}
+            <div class="error alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times</button>
+                {{ field }}:  {{ error }}
+            </div>
+        {% endfor %}
+        {% endfor %}
+        <form role="form" action="{{ url_for('auth.index') }}" method="POST" class="m-x-auto pull-left1 app-login-form form-horizontal">
+            {{ form.csrf_token }}
+            <p class="pull-left1"><h1>Sign Up:</h1></p><br />
+            {{ form.hidden_tag() }}
+
+            {{ form.first_name(class="form-control", required="required", placeholder="First Name") }} <br />
+            {{ form.last_name(class="form-control", required="required", placeholder="Last Name") }} <br />
+            {{ form.dob.label }} <br /> {{ form.dob(class="form-control", required="required", type="date", placeholder="MM/DD/YYYY") }} <br />
+            {{ form.gender.label }} {{ form.gender(class="form-control", required="required") }} <br />
+            {{ form.nationality.label }} {{ form.nationality(class="form-control", required="required") }} <br />
+            {{ form.residence.label }} {{ form.residence(class="form-control", required="required") }} <br />
+            {{ form.postal_code(class="form-control", required="required", placeholder="Zip or Postal Code") }} <br />
+            {{ form.username(class="form-control", required="required", placeholder="Username") }} <br />
+            {{ form.email(class="form-control", required="required", type="email", placeholder="Email") }} <br />
+            {{ form.password(class="form-control", required="required", placeholder="Password") }} <br />
+            {{ form.password2(class="form-control", required="required", placeholder="Re-type Password") }} <br />
+
+            <div class="m-b-lg text-center">
+                {{ form.submit(class="btn btn-pill btn-default1", type="submit") }}
+            </div>
+        </form>
+    </div>
+</div>
+<div class="col-md-6">
+  <div class="panel1 app-login-form panel-default panel-profile">
+      <div class="text-center">
+      <a href="{{url_for('auth.index') }}" class="app-brand m-b-lg">
+        <img class="img-circle" src="../static/img/brand.jpeg" alt="brand">
+      </a>
+      </div>
+      <h5><span class="icon icon-flag"></span> Be your culture's ambassador.</h5>
+      <h5>Learn about other cultures through the people who actually live it.</h5>
+  </div>
+</div>
+
+{% endblock %}

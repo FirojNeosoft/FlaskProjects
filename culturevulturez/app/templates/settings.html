@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+    Settings
+{% endblock %}
+
+{% block main %}
+    <div class="text-center"><h1>Let's set up your profile {{ user.first_name }}</h1></div><br />
+        {% for field in form.errors %}
+        {% for error in form.errors[field] %}
+            <div class="error alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times</button>
+                {{ field }}:  {{ error }}
+            </div>
+        {% endfor %}
+        {% endfor %}
+
+                <form role="form"  method="POST" class="container p-t-md" enctype="multipart/form-data">
+                    <div class="row">
+                    <div class="col-md-3">
+                    {{ form.csrf_token }}
+                    {{ form.hidden_tag() }}
+                    &nbsp <br /><br /><br />
+                    <img class="panel-profile-img" src="{{ current_user.profile_pic }}" /><br />
+                    {{ form.profile_pic.label }} <br /> {{ form.profile_pic(class="form-control") }}<br />
+                    </div>
+                    <div class="col-md-4">
+                    {{ form.nationality.label }} <br /> {{ form.nationality(class="form-control") }}<br />
+                    {{ form.residence.label }} <br /> {{ form.residence(class="form-control") }}<br />
+                    {{ form.postal_code.label }} <br /> {{ form.postal_code(class="form-control") }}<br />
+                    {{ form.bio.label }} <br /> {{ form.bio(class="form-control") }}<br />
+                    {{ form.about_me.label }} <br /> {{ form.about_me(class="form-control") }}<br />
+                    </div>
+                    <div class="col-md-3">
+                    {{ form.interests.label }}{{ form.interests() }}
+                    </div>
+                    &nbsp
+                    {{ form.submit(class="btn btn-pill text-center btn-primary-outline btn-sm", type="submit") }}
+                    </div>
+                </form>
+
+{% endblock %}

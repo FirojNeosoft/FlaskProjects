@@ -1,0 +1,11 @@
+<p>Dear {{ user.first_name }}</p>
+
+<p>Thank you for joining the Culture Vulturez community!<br />
+    Please confirm your account by clicking the link below:<br />
+    {{ url_for('auth.confirm', token=token, _external=True) }}<br />
+
+    Sincerely,<br />
+
+    The Culture Vulturez Team!
+
+</p>
